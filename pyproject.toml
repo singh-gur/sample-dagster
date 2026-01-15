@@ -1,0 +1,31 @@
+[project]
+name = "sample-dagster"
+version = "0.1.0"
+description = "Dagster sample project with assets and jobs"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "dagster>=1.12",
+    "dagster-webserver>=1.12",
+    "dagster-duckdb>=0.23",
+    "pandas",
+]
+dynamic = []
+
+[project.urls]
+Homepage = "https://github.com/username/sample-dagster"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "W"]
+ignore = []
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sample_dagster"]
