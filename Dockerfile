@@ -8,7 +8,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 RUN pip install --no-cache-dir uv
 
 # Copy only dependency files first for layer caching
-COPY pyproject.toml .python-version* ./
+COPY pyproject.toml .python-version* uv.lock README.md ./
 
 # Install dependencies
 RUN uv sync --frozen --no-dev
