@@ -1,0 +1,54 @@
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+.env
+.venv
+venv
+ENV
+
+# Distribution / packaging
+*.egg-info
+dist
+build
+*.egg
+
+# Testing
+.pytest_cache
+.coverage
+htmlcov
+*.coveragereport
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# CI/CD
+.github
+.gitlab-ci.yml
+.travis.yml
+
+# Documentation
+docs
+*.md
+!README.md
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dagster
+dagster.yaml
