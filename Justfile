@@ -85,16 +85,18 @@ outdated:
 # Docker Commands
 # ============================================================================
 
-build:
+# Build docker image
+build-img:
     docker build --load -t {{ IMAGE }}:{{ TAG }} -t {{ IMAGE }}:{{ BRANCH }} -t {{ IMAGE }}:latest .
 
-push: build
+# Push docker image
+push-img: build-img
     docker push {{ IMAGE }}:{{ TAG }}
     docker push {{ IMAGE }}:{{ BRANCH }}
     docker push {{ IMAGE }}:latest
 
 # Build and run locally with Docker
-run-local: build
+run-local: build-img
     docker run --rm -p 3000:3000 {{ IMAGE }}:latest
 
 # ============================================================================
