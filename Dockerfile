@@ -9,13 +9,11 @@ RUN pip install --no-cache-dir uv
 WORKDIR /app
 
 # Copy only dependency files first for layer caching
-COPY pyproject.toml .python-version* uv.lock README.md ./
-COPY sample_dagster ./sample_dagster
+COPY . .
 
 # Install dependencies
 RUN uv sync --frozen --no-dev
 
 # Copy application code
-COPY main.py .
 
-CMD ["python", "-m", "main"]
+ENTRYPOINT [ "/app/.venv/bin/python" ]

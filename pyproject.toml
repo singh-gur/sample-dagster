@@ -6,11 +6,18 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "dagster>=1.12",
-    "dagster-webserver>=1.12",
     "dagster-duckdb>=0.23",
     "pandas",
 ]
+
 dynamic = []
+
+[dependency-groups]
+dev = [
+    "dagster-dg-cli>=1.12.10",
+    "dagster-webserver>=1.12.10",
+    "ruff>=0.14.12",
+]
 
 [build-system]
 requires = ["hatchling"]
@@ -25,4 +32,14 @@ select = ["E", "F", "I", "UP", "W"]
 ignore = []
 
 [tool.hatch.build.targets.wheel]
-packages = ["sample_dagster"]
+force-include = { "pyproject.toml" =  "pyproject.toml" }
+packages = ["src/sample_dagster"]
+
+[tool.dg]
+directory_type = "project"
+
+[tool.dg.project]
+root_module = "sample_dagster"
+registry_modules = [
+    "sample_dagster.components.*",
+]
