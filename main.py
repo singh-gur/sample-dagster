@@ -19,4 +19,4 @@ def get_dagster_definitions() -> Definitions:
 if __name__ == "__main__":
     # Allow running basic verification
     defs = get_dagster_definitions()
-    print(f"Dagster definitions loaded: {len(defs.assets)} assets, {len(defs.jobs)} jobs")
+    print(f"Dagster definitions loaded: {len(defs.assets)} assets")
