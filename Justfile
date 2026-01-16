@@ -31,47 +31,47 @@ check:
 
 # Run tests
 test:
-    pytest --cov
+    .venv/bin/pytest --cov
 
 # Run tests with coverage report
 test-cov:
-    pytest --cov=src --cov-report=term-missing --cov-report=html
+    .venv/bin/pytest --cov=src --cov-report=term-missing --cov-report=html
 
 # Run a single test file
 test-file FILE:
-    pytest {{ FILE }}
+    .venv/bin/pytest {{ FILE }}
 
 # Run tests matching a pattern
 test-name PATTERN:
-    pytest -k "{{ PATTERN }}"
+    .venv/bin/pytest -k "{{ PATTERN }}"
 
 # Watch mode for tests (requires pytest-watch)
 test-watch:
-    ptw --ignore=src/sample_dagster/defs
+    .venv/bin/ptw --ignore=src/sample_dagster/defs
 
 # Start Dagster webserver for development
 dev:
-    dagster dev
+    .venv/bin/dagster dev
 
 # Start Dagster webserver with reload on file changes
 dev-watch:
-    dagster dev --reload
+    .venv/bin/dagster dev --reload
 
 # Build Dagster components
 build-dagster:
-    dagster-dg build
+    .venv/bin/dagster-dg build
 
 # Generate a new Dagster component
 generate NAME TYPE="asset":
-    dagster-dg generate {{ TYPE }} {{ NAME }}
+    .venv/bin/dagster-dg generate {{ TYPE }} {{ NAME }}
 
 # Run type checking with mypy (if installed)
 type-check:
-    mypy src/
+    .venv/bin/mypy src/
 
 # Audit dependencies for security vulnerabilities
 audit:
-    uv pip audit
+    .venv/bin/pip-audit
 
 # Show dependency tree
 deps-tree:
@@ -130,9 +130,9 @@ distclean: clean clean-dagster
 # Show project info
 info:
     @echo "Project: sample-dagster"
-    @echo "Python: $$(python3 --version)"
-    @echo "UV: $$(uv --version)"
-    @echo "Dagster: $$(python3 -c 'import dagster; print(dagster.__version__)')"
+    @.venv/bin/python --version | sed 's/^/Python: /'
+    @uv --version | sed 's/^/UV: /'
+    @.venv/bin/python -c 'import dagster; print("Dagster:", dagster.__version__)'
 
 # Show all available just recipes
 list:
