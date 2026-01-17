@@ -13,11 +13,19 @@ RUN pip install --no-cache-dir .
 
 # Create non-root user for security
 RUN groupadd -r dagster && \
-    useradd -r -g dagster -u 1000 dagster && \
+    useradd -r -g dagster -u 1000 dagster
+
+# Create Dagster home directory and copy configuration
+RUN mkdir -p /opt/dagster/dagster_home/storage && \
+    cp dagster.yaml /opt/dagster/dagster_home/dagster.yaml && \
+    chown -R dagster:dagster /opt/dagster && \
     chown -R dagster:dagster /app
 
 # Switch to non-root user
 USER dagster
+
+# Set Dagster home environment variable
+ENV DAGSTER_HOME=/opt/dagster/dagster_home
 
 # Expose gRPC port
 EXPOSE 3030

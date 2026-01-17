@@ -51,6 +51,5 @@ docs
 Thumbs.db
 
 # Dagster
-dagster.yaml
 .ruff_cache
 .tmp*
