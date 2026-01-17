@@ -151,14 +151,12 @@ jobs:
             REGISTRY_PASSWORD: ((registry_password))
 
           run:
-            path: sh
+            path: /bin/sh
             args:
-              - -euc
+              - -c
               - |
                 # Login to registry
-                cosign login regv2.gsingh.io \
-                  -u "$REGISTRY_USERNAME" \
-                  -p "$REGISTRY_PASSWORD"
+                cosign login regv2.gsingh.io -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
 
                 # Get the commit SHA for tagging
                 cd repo
@@ -172,7 +170,7 @@ jobs:
                 echo "Signing image: ${IMAGE_REPO}:${COMMIT_SHA}"
                 cosign sign --key env://COSIGN_PRIVATE_KEY "${IMAGE_REPO}:${COMMIT_SHA}" -y
 
-                echo "✅ Images signed successfully"
+                echo "Images signed successfully"
 
   # ============================================================================
   # Job: Build and Push (Tag-based releases)
@@ -318,22 +316,20 @@ jobs:
             REGISTRY_PASSWORD: ((registry_password))
 
           run:
-            path: sh
+            path: /bin/sh
             args:
-              - -euc
+              - -c
               - |
                 echo "Verifying signature for: $IMAGE"
 
                 # Login to registry
-                cosign login regv2.gsingh.io \
-                  -u "$REGISTRY_USERNAME" \
-                  -p "$REGISTRY_PASSWORD"
+                cosign login regv2.gsingh.io -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
 
                 # Verify the signature
                 echo "$COSIGN_PUBLIC_KEY" > cosign.pub
                 cosign verify --key cosign.pub "$IMAGE"
 
-                echo "✅ Signature verification successful"
+                echo "Signature verification successful"
 
 # ============================================================================
 # Groups for organizing jobs in the UI
