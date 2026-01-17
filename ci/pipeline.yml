@@ -2,13 +2,6 @@
 # Concourse CI/CD Pipeline for sample-dagster
 # This pipeline builds, tests, and pushes Docker images to the registry
 
-resource_types:
-  - name: registry-image
-    type: registry-image
-    source:
-      repository: concourse/registry-image-resource
-      tag: latest
-
 resources:
   # Git repository resource
   - name: repo
