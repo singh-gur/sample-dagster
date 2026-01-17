@@ -131,6 +131,49 @@ jobs:
           image: image/image.tar
           additional_tags: repo/.git/ref
 
+      - task: sign-image
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source:
+              repository: gcr.io/projectsigstore/cosign
+              tag: latest
+
+          inputs:
+            - name: repo
+
+          params:
+            COSIGN_PRIVATE_KEY: ((cosign_private_key))
+            COSIGN_PASSWORD: ((cosign_password))
+            IMAGE_REPO: regv2.gsingh.io/personal/sample-dagster
+            REGISTRY_USERNAME: ((registry_username))
+            REGISTRY_PASSWORD: ((registry_password))
+
+          run:
+            path: sh
+            args:
+              - -euc
+              - |
+                # Login to registry
+                cosign login regv2.gsingh.io \
+                  -u "$REGISTRY_USERNAME" \
+                  -p "$REGISTRY_PASSWORD"
+
+                # Get the commit SHA for tagging
+                cd repo
+                COMMIT_SHA=$(git rev-parse --short HEAD)
+                cd ..
+
+                # Sign the images
+                echo "Signing image: ${IMAGE_REPO}:latest"
+                cosign sign --key env://COSIGN_PRIVATE_KEY "${IMAGE_REPO}:latest" -y
+
+                echo "Signing image: ${IMAGE_REPO}:${COMMIT_SHA}"
+                cosign sign --key env://COSIGN_PRIVATE_KEY "${IMAGE_REPO}:${COMMIT_SHA}" -y
+
+                echo "✅ Images signed successfully"
+
   # ============================================================================
   # Job: Build and Push (Tag-based releases)
   # Triggered only on git tags for versioned releases
@@ -255,6 +298,42 @@ jobs:
                   "$IMAGE"
 
                 echo "✅ Security scan complete"
+
+      - task: verify-signature
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source:
+              repository: gcr.io/projectsigstore/cosign
+              tag: latest
+
+          inputs:
+            - name: repo
+
+          params:
+            COSIGN_PUBLIC_KEY: ((cosign_public_key))
+            IMAGE: regv2.gsingh.io/personal/sample-dagster:latest
+            REGISTRY_USERNAME: ((registry_username))
+            REGISTRY_PASSWORD: ((registry_password))
+
+          run:
+            path: sh
+            args:
+              - -euc
+              - |
+                echo "Verifying signature for: $IMAGE"
+
+                # Login to registry
+                cosign login regv2.gsingh.io \
+                  -u "$REGISTRY_USERNAME" \
+                  -p "$REGISTRY_PASSWORD"
+
+                # Verify the signature
+                echo "$COSIGN_PUBLIC_KEY" > cosign.pub
+                cosign verify --key cosign.pub "$IMAGE"
+
+                echo "✅ Signature verification successful"
 
 # ============================================================================
 # Groups for organizing jobs in the UI
