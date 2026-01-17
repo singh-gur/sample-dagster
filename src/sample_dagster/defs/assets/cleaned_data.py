@@ -68,13 +68,13 @@ def cleaned_sales_data(
     )
     context.add_output_metadata(
         {
-            "initial_rows": initial_count,
-            "final_rows": final_count,
-            "duplicates_removed": duplicates_removed,
-            "missing_values_filled": missing_customers,
-            "invalid_prices_removed": invalid_prices,
-            "total_revenue": df["total_amount"].sum(),
-            "avg_transaction_value": df["total_amount"].mean(),
+            "initial_rows": int(initial_count),
+            "final_rows": int(final_count),
+            "duplicates_removed": int(duplicates_removed),
+            "missing_values_filled": int(missing_customers),
+            "invalid_prices_removed": int(invalid_prices),
+            "total_revenue": float(df["total_amount"].sum()),
+            "avg_transaction_value": float(df["total_amount"].mean()),
         }
     )
 

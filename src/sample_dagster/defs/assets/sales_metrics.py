@@ -84,11 +84,11 @@ def sales_metrics(
     )
     context.add_output_metadata(
         {
-            "total_revenue": df["total_amount"].sum(),
-            "total_transactions": len(df),
-            "unique_customers": df["customer_id"].nunique(),
-            "days_analyzed": len(daily_sales),
-            "products_ranked": len(product_performance),
+            "total_revenue": float(df["total_amount"].sum()),
+            "total_transactions": int(len(df)),
+            "unique_customers": int(df["customer_id"].nunique()),
+            "days_analyzed": int(len(daily_sales)),
+            "products_ranked": int(len(product_performance)),
         }
     )
 
@@ -133,8 +133,8 @@ def product_performance(
 
     context.add_output_metadata(
         {
-            "top_product": product_performance.iloc[0]["product_id"],
-            "top_product_revenue": product_performance.iloc[0]["total_revenue"],
+            "top_product": str(product_performance.iloc[0]["product_id"]),
+            "top_product_revenue": float(product_performance.iloc[0]["total_revenue"]),
         }
     )
 
@@ -192,9 +192,9 @@ def customer_insights(
     context.log.info(f"Generated insights for {len(customer_insights)} customers")
     context.add_output_metadata(
         {
-            "total_customers": len(customer_insights),
-            "total_revenue": customer_insights["total_revenue"].sum(),
-            "top_customer_value": customer_insights.iloc[0]["total_revenue"],
+            "total_customers": int(len(customer_insights)),
+            "total_revenue": float(customer_insights["total_revenue"].sum()),
+            "top_customer_value": float(customer_insights.iloc[0]["total_revenue"]),
         }
     )
 

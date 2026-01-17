@@ -74,10 +74,12 @@ def enriched_sales_data(
     context.log.info(f"Enriched {len(enriched_df)} transactions with customer data")
     context.add_output_metadata(
         {
-            "rows_enriched": len(enriched_df),
-            "missing_customers_filled": missing_customers,
-            "unique_customers": enriched_df["customer_id"].nunique(),
-            "tier_distribution": enriched_df["tier"].value_counts().to_dict(),
+            "rows_enriched": int(len(enriched_df)),
+            "missing_customers_filled": int(missing_customers),
+            "unique_customers": int(enriched_df["customer_id"].nunique()),
+            "tier_distribution": {
+                k: int(v) for k, v in enriched_df["tier"].value_counts().to_dict().items()
+            },
         }
     )
 
