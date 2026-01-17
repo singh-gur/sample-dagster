@@ -8,9 +8,10 @@ resources:
     type: git
     icon: github
     source:
-      uri: git@github.com:singh-gur/sample-dagster.git
+      uri: https://github.com/singh-gur/sample-dagster.git
       branch: main
-      private_key: ((github_private_key))
+      username: ((github_username))
+      password: ((github_token))
 
   # Docker image resource for pushing
   - name: docker-image
@@ -63,27 +64,27 @@ jobs:
               - -euc
               - |
                 cd repo
-                
+
                 # Install uv for dependency management
                 pip install --no-cache-dir uv
-                
+
                 # Install dependencies
                 uv sync
-                
+
                 # Run linter
                 echo "Running ruff check..."
                 uv run ruff check .
-                
+
                 # Run formatter check
                 echo "Running ruff format check..."
                 uv run ruff format --check .
-                
+
                 # Run tests (if they exist)
                 if [ -d "tests" ]; then
                   echo "Running tests..."
                   uv run pytest --cov || true
                 fi
-                
+
                 echo "✅ All checks passed!"
 
   # ============================================================================
@@ -116,7 +117,6 @@ jobs:
           params:
             CONTEXT: repo
             DOCKERFILE: repo/Dockerfile
-            BUILD_ARGS_FILE: repo/ci/build-args.txt
 
           run:
             path: build
@@ -159,15 +159,15 @@ jobs:
               - -euc
               - |
                 cd repo
-                
+
                 # Check if current commit has a tag
                 TAG=$(git describe --tags --exact-match 2>/dev/null || echo "")
-                
+
                 if [ -z "$TAG" ]; then
                   echo "❌ No tag found on current commit"
                   exit 1
                 fi
-                
+
                 echo "✅ Found tag: $TAG"
                 echo "$TAG" > ../tag-name
 
@@ -241,19 +241,19 @@ jobs:
               - -euc
               - |
                 echo "Scanning image: $IMAGE"
-                
+
                 # Login to registry
                 trivy registry login regv2.gsingh.io \
                   --username "$REGISTRY_USERNAME" \
                   --password "$REGISTRY_PASSWORD"
-                
+
                 # Scan image for vulnerabilities
                 trivy image \
                   --severity HIGH,CRITICAL \
                   --exit-code 0 \
                   --no-progress \
                   "$IMAGE"
-                
+
                 echo "✅ Security scan complete"
 
 # ============================================================================
