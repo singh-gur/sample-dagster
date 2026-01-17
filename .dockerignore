@@ -53,3 +53,5 @@ Thumbs.db
 # Dagster
 .ruff_cache
 .tmp*
+ci/*
+.ignore

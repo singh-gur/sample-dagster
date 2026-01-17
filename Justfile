@@ -124,6 +124,34 @@ distclean: clean clean-dagster
     @echo "Full cleanup complete!"
 
 # ============================================================================
+# Concourse CI/CD Commands
+# ============================================================================
+
+# Set Concourse pipeline
+ci-set-pipeline TARGET:
+    ci/set-pipeline.sh {{ TARGET }}
+
+# Trigger test job
+ci-trigger-test TARGET:
+    fly -t {{ TARGET }} trigger-job -j sample-dagster/test
+
+# Trigger build-and-push job
+ci-trigger-build TARGET:
+    fly -t {{ TARGET }} trigger-job -j sample-dagster/build-and-push
+
+# Trigger release job
+ci-trigger-release TARGET:
+    fly -t {{ TARGET }} trigger-job -j sample-dagster/release
+
+# Watch build-and-push job
+ci-watch-build TARGET:
+    fly -t {{ TARGET }} watch -j sample-dagster/build-and-push
+
+# Destroy pipeline
+ci-destroy TARGET:
+    fly -t {{ TARGET }} destroy-pipeline -p sample-dagster
+
+# ============================================================================
 # Utility Commands
 # ============================================================================
 
