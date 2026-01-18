@@ -10,7 +10,7 @@ from dagster import AssetExecutionContext, asset
 
 @asset(
     deps=["enriched_sales_data"],
-    compute_kind="pandas",
+    compute_kind="trino",
 )
 def sales_metrics(
     context: AssetExecutionContext,
@@ -99,7 +99,7 @@ def sales_metrics(
 
 @asset(
     deps=["enriched_sales_data"],
-    compute_kind="pandas",
+    compute_kind="trino",
 )
 def product_performance(
     context: AssetExecutionContext,
@@ -143,7 +143,7 @@ def product_performance(
 
 @asset(
     deps=["enriched_sales_data"],
-    compute_kind="pandas",
+    compute_kind="trino",
 )
 def customer_insights(
     context: AssetExecutionContext,

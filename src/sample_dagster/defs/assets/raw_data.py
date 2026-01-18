@@ -10,7 +10,7 @@ from dagster import AssetExecutionContext, asset
 
 @asset(
     deps=[],
-    compute_kind="pandas",
+    compute_kind="trino",
 )
 def raw_sales_data(context: AssetExecutionContext) -> pd.DataFrame:
     """Ingest raw sales transactions from simulated source.
@@ -80,7 +80,7 @@ def raw_sales_data(context: AssetExecutionContext) -> pd.DataFrame:
 
 @asset(
     deps=["raw_sales_data"],
-    compute_kind="pandas",
+    compute_kind="trino",
 )
 def raw_customers_data(context: AssetExecutionContext) -> pd.DataFrame:
     """Ingest raw customer reference data.

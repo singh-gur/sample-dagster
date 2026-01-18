@@ -10,7 +10,7 @@ from dagster import AssetExecutionContext, asset
 
 @asset(
     deps=["cleaned_sales_data", "raw_customers_data"],
-    compute_kind="pandas",
+    compute_kind="trino",
 )
 def enriched_sales_data(
     context: AssetExecutionContext,
