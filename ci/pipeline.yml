@@ -137,7 +137,7 @@ jobs:
           image_resource:
             type: registry-image
             source:
-              repository: gcr.io/projectsigstore/cosign
+              repository: alpine
               tag: latest
 
           inputs:
@@ -151,10 +151,13 @@ jobs:
             REGISTRY_PASSWORD: ((registry_password))
 
           run:
-            path: /bin/sh
+            path: sh
             args:
-              - -c
+              - -euc
               - |
+                # Install cosign
+                apk add --no-cache cosign git
+
                 # Login to registry
                 cosign login regv2.gsingh.io -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
 
@@ -303,7 +306,7 @@ jobs:
           image_resource:
             type: registry-image
             source:
-              repository: gcr.io/projectsigstore/cosign
+              repository: alpine
               tag: latest
 
           inputs:
@@ -316,10 +319,13 @@ jobs:
             REGISTRY_PASSWORD: ((registry_password))
 
           run:
-            path: /bin/sh
+            path: sh
             args:
-              - -c
+              - -euc
               - |
+                # Install cosign
+                apk add --no-cache cosign
+
                 echo "Verifying signature for: $IMAGE"
 
                 # Login to registry
